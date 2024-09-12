@@ -5,6 +5,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
+using System.IO;
+using System.ComponentModel;
 
 namespace ConsoleApp1
 {
@@ -12,161 +14,52 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Table[] tables = {
-                new Table(1, 3),
-                new Table(2, 5),
-                new Table(3, 6),
-                new Table(4, 7)
+            Task[] tasks = {
+                new Task(new Performer("Артем"), "Выкопать яму."),
+                new Task(new Performer("Серега"), "Сделать подкоп")
             };
-            while (true)
-            {
-                Console.ReadKey();
-                Console.Clear();
-                Console.SetCursorPosition(0, 18);
-                foreach (Table table in tables)
-                {
-                    table.ShowInfo();
-                }
+            Board schedule = new Board(tasks);
+            schedule.ShowAllTasks();
 
-                //Console.ReadKey();
-                Console.SetCursorPosition(0, 3);
-                Console.WriteLine("Введите операцию, которую хотите выполнить");
-                Console.WriteLine("1 - забронировать стол" +
-                    "\n2 - ничего не делать");
-                int command = Convert.ToInt32(Console.ReadLine());
-
-                switch (command)
-                {
-                    case 1:
-                        Console.WriteLine("Сейчас порешаем");
-                        Console.WriteLine("Введите номер стола для брони");
-                        int numberTable = Convert.ToInt32(Console.ReadLine()) - 1;
-                        if (numberTable < tables.Length)
-                        {
-                            Console.WriteLine("Введите количество мест");
-                            int numberPlaces = Convert.ToInt32(Console.ReadLine());
-                            tables[numberTable].ReserveTable(numberPlaces);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Невозможно выбрать этот стол");
-                        }
-                        break;
-
-                    case 2:
-                        Console.WriteLine("Ну и пошёл в жопу урод");
-                        break;
-                    default:
-                        Console.WriteLine("ты что в глаза долбишься, " +
-                            "нет такой операции");
-                        break;
-                }
-            }
-            //Console.SetCursorPosition(11, 12);
-            //int[] x = { 1, 2, 3, 4 };
-            //for (int i = 0; i < x.Length; i++)
-            //{
-            //    Console.WriteLine($"{x[i]} ");
-            //}
-            //Console.CursorVisible = false;
-            //char[,] map =
-            //{
-            //    {'#','#','#','#','#','#','#','#','#','#','#','#','#','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ','#',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','#'},
-            //    {'#','#','#','#','#','#','#','#','#','#','#','#','#','#'}
-            //};
-            //int userX = 1; int userY = 1;
-            //while (true)
-            //{
-            //    Console.SetCursorPosition(0, 0);
-            //    for (int i = 0; i < map.GetLength(0); i++)
-            //    {
-            //        for (int j = 0; j < map.GetLength(1); j++)
-            //        {
-            //            Console.Write(Convert.ToString(map[i, j]));
-            //        }
-            //        Console.WriteLine();
-            //    }
-            //    Console.SetCursorPosition(userY, userX);
-            //    Console.Write('@');
-            //    ConsoleKeyInfo charKey = Console.ReadKey();
-            //    switch (charKey.Key)
-            //    {
-            //        case ConsoleKey.UpArrow:
-            //            if (map[userX - 1, userY] != '#')
-            //            {
-            //                userX--;
-            //            }
-            //            break;
-            //        case ConsoleKey.DownArrow:
-            //            if (map[userX + 1, userY] != '#')
-            //            {
-            //                userX++;
-            //            }
-            //            break;
-            //        case ConsoleKey.LeftArrow:
-            //            if (map[userX, userY - 1] != '#')
-            //            {
-            //                userY--;
-            //            }
-            //            break; 
-            //        case ConsoleKey.RightArrow:
-            //            if (map[userX, userY + 1] != '#')
-            //            {
-            //                userY++;
-            //            }
-            //            break;
-            //    }
-            //    Console.ReadKey();
-            //    Console.Clear();
-            //}
         }
     }
-    class Table
+    class Performer
     {
-        public int Number;
-        public int MaxPlaces;
-        public int FreePlaces;
-        public Table(int Number, int MaxPlaces)
+        public string Name;
+        public Performer(string name)
         {
-            this.Number = Number;
-            this.MaxPlaces = MaxPlaces;
-            FreePlaces = MaxPlaces;
+            Name = name;
         }
-        public Table()
+    }
+    class Board
+    {
+        public Task[] Tasks;
+        public Board(Task[] tasks)
         {
-            Number = 0;
-            MaxPlaces = 0;
-            FreePlaces = 0;
+            Tasks = tasks;
+        }
+        public void ShowAllTasks()
+        {
+            for (int i = 0;i < Tasks.Length; i++)
+            {
+                Tasks[i].ShowInfo();
+            }
+        }
+    }
+    class Task
+    {
+        public Performer Worker;
+        public string Description;
+
+        public Task(Performer worker, string description)
+        {
+            Worker = worker;
+            Description = description;
         }
         public void ShowInfo()
         {
-            Console.WriteLine($"Число свободных мест у стола {Number}: {FreePlaces} из {MaxPlaces}");
-        }
-        public void ReserveTable(int NumPlacesReserve)
-        {
-            if (FreePlaces >= NumPlacesReserve)
-            {
-                FreePlaces -= NumPlacesReserve;
-                Console.WriteLine($"Получилось забронировать: {NumPlacesReserve} на {Number}");
-            }
-            else
-            {
-                Console.WriteLine("Не получилось забронировать, мест мало");
-            }
+            Console.WriteLine($"Ответственный: {Worker.Name}\n" +
+                $"Описание задачи: {Description}");
         }
     }
 }
