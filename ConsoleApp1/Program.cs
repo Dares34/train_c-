@@ -15,36 +15,26 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Vehicle[] vehicles = { new Car(), new Train() };
-            foreach (Vehicle vehicle in vehicles)
-            {
-                vehicle.Move();
-            }
+            User.Identificators = 10;
+            User user1 = new User();
+            User user2 = new User();
+            Console.WriteLine(user1.ShowInfo());
+            Console.WriteLine(user2.ShowInfo());
+
         }
 
     }
-    
-    abstract class Vehicle
+    class User
     {
-        protected float Speed;
-        public abstract void Move();
-        public float GetCurrentSpeed()
+        public static int Identificators;
+        private int _identificator;
+        public User() {
+            _identificator = ++Identificators;
+        }
+        public int ShowInfo()
         {
-            return Speed;
+            return _identificator;
         }
     }
-    class Car : Vehicle
-    {
-        public override void Move()
-        {
-            Console.WriteLine("Машина едет по асфальту");
-        }
-    }
-    class Train : Vehicle
-    {
-        public override void Move()
-        {
-            Console.WriteLine("Трактор прётся");
-        }
-    }
+   
 }
