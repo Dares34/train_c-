@@ -15,31 +15,36 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            
+            Vehicle[] vehicles = { new Car(), new Train() };
+            foreach (Vehicle vehicle in vehicles)
+            {
+                vehicle.Move();
+            }
         }
 
     }
-    interface IMovable
+    
+    abstract class Vehicle
     {
-        void Move();
-    }
-    interface IBurnable
-    {
-        void Burn();
-    }
-    class Vehicle
-    {
-        
-    }
-    class Car : Vehicle, IMovable, IBurnable
-    {
-        public void Move()
+        protected float Speed;
+        public abstract void Move();
+        public float GetCurrentSpeed()
         {
-
+            return Speed;
         }
-        public void Burn()
+    }
+    class Car : Vehicle
+    {
+        public override void Move()
         {
-
+            Console.WriteLine("Машина едет по асфальту");
+        }
+    }
+    class Train : Vehicle
+    {
+        public override void Move()
+        {
+            Console.WriteLine("Трактор прётся");
         }
     }
 }
