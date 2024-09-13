@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Schema;
 using System.IO;
 using System.ComponentModel;
+using System.Security.Permissions;
 
 namespace ConsoleApp1
 {
@@ -14,52 +15,42 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Task[] tasks = {
-                new Task(new Performer("Артем"), "Выкопать яму."),
-                new Task(new Performer("Серега"), "Сделать подкоп")
+            Behavior[] behaviors = {
+                new Walker(),
+                new Jumper()
             };
-            Board schedule = new Board(tasks);
-            schedule.ShowAllTasks();
-
-        }
-    }
-    class Performer
-    {
-        public string Name;
-        public Performer(string name)
-        {
-            Name = name;
-        }
-    }
-    class Board
-    {
-        public Task[] Tasks;
-        public Board(Task[] tasks)
-        {
-            Tasks = tasks;
-        }
-        public void ShowAllTasks()
-        {
-            for (int i = 0;i < Tasks.Length; i++)
+            while (true)
             {
-                Tasks[i].ShowInfo();
+                foreach (var behavior in behaviors)
+                {
+                    behavior.Update();
+                    System.Threading.Thread.Sleep(1000);
+                }
             }
         }
-    }
-    class Task
-    {
-        public Performer Worker;
-        public string Description;
 
-        public Task(Performer worker, string description)
+    }
+    class Behavior
+    {
+        public virtual void Update()
         {
-            Worker = worker;
-            Description = description;
+
         }
-        public void ShowInfo()
+
+    }
+    class Walker : Behavior
+    {
+        public override void Update()
         {
-            Console.WriteLine($"Ответственный: {Worker.Name}\n" +
-                $"Описание задачи: {Description}");
+            Console.WriteLine("Иду");
         }
     }
+    class Jumper : Behavior
+    {
+        public override void Update()
+        {
+            Console.WriteLine("Прыгаю");
+        }
+    }
+
 }
