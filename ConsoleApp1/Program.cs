@@ -15,42 +15,31 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Behavior[] behaviors = {
-                new Walker(),
-                new Jumper()
-            };
-            while (true)
-            {
-                foreach (var behavior in behaviors)
-                {
-                    behavior.Update();
-                    System.Threading.Thread.Sleep(1000);
-                }
-            }
+            
         }
 
     }
-    class Behavior
+    interface IMovable
     {
-        public virtual void Update()
+        void Move();
+    }
+    interface IBurnable
+    {
+        void Burn();
+    }
+    class Vehicle
+    {
+        
+    }
+    class Car : Vehicle, IMovable, IBurnable
+    {
+        public void Move()
         {
 
         }
-
-    }
-    class Walker : Behavior
-    {
-        public override void Update()
+        public void Burn()
         {
-            Console.WriteLine("Иду");
+
         }
     }
-    class Jumper : Behavior
-    {
-        public override void Update()
-        {
-            Console.WriteLine("Прыгаю");
-        }
-    }
-
 }
