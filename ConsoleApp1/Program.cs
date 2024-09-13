@@ -15,26 +15,24 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            User.Identificators = 10;
-            User user1 = new User();
-            User user2 = new User();
-            Console.WriteLine(user1.ShowInfo());
-            Console.WriteLine(user2.ShowInfo());
-
+            //Vector2 position = default(Vector2);
+            Vector2 po = new Vector2(10);
+            Console.WriteLine( po.X);
+            //position.X = 10;
         }
 
     }
-    class User
+    struct Vector2
     {
-        public static int Identificators;
-        private int _identificator;
-        public User() {
-            _identificator = ++Identificators;
-        }
-        public int ShowInfo()
+        public int X, Y;
+        public Vector2(int x, int y)
         {
-            return _identificator;
+            X = x;
+            Y = y;
+        }
+        public Vector2(int x) : this()
+        {
+            X = x;
         }
     }
-   
 }
